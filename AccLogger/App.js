@@ -1,9 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
+import * as FileSystem from 'expo-file-system';
 
 export default function App() {
   const [data, setData] = useState({});
+  const [dataWasUploaded, setdataWasUploaded] = useState(true);
+  
+  async function saveDataToDB(){
+    try {
+      const response = await api.post('newdata',{
+        params:{
+          data
+        }
+      });
+      setdataWasUploaded(true)
+    }
+    catch (e) {
+      setdataWasUploaded(false)
+    }
+  }
 
   useEffect(() => {
     _toggle();
@@ -14,6 +30,10 @@ export default function App() {
       _unsubscribe();
     };
   }, []);
+  
+  useEffect(() => {
+    saveDataToDB();
+  }, [data]);
 
   const _toggle = () => {
     if (this._subscription) {
@@ -28,7 +48,7 @@ export default function App() {
   };
 
   const _fast = () => {
-    Accelerometer.setUpdateInterval(1);
+    Accelerometer.setUpdateInterval(10);
   };
 
   const _subscribe = () => {
@@ -43,9 +63,10 @@ export default function App() {
   };
 
   let { x, y, z } = data;
+  Accelerometer.setUpdateInterval(10)
   return (
     <View>
-      <Text>Accelerometer: (in Gs where 1 G = 9.81 m s^-2)</Text>
+      <Text>Accelerometer: (in Gs where 1 G = 9.81 m s^-2) {FileSystem.documentDirectory}</Text>
       <Text>
         x: {round(x)} y: {round(y)} z: {round(z)}
       </Text>
@@ -60,6 +81,7 @@ export default function App() {
           <Text>Fast</Text>
         </TouchableOpacity>
       </View>
+  <Text>Last upload status: {String(dataWasUploaded)}</Text>
     </View>
   );
 }
@@ -71,4 +93,3 @@ function round(n) {
 
   return Math.floor(n * 1000000) / 1000000;
 }
-
