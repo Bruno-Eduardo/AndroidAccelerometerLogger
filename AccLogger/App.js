@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
 import * as FileSystem from 'expo-file-system';
 import Constants from 'expo-constants';
+import api from './src/services/api';
 
 export default function App() {
   const [data, setData] = useState({});
@@ -10,14 +11,14 @@ export default function App() {
   
   async function saveDataToDB(){
     try {
-      const response = await api.post('newdata',{
-        params:{
-          data
-        }
-      });
+      timedData = {...data,
+                   ...{'time':'todo: implement'}
+                  }
+      const response = await api.post('newdata', timedData);
       setdataWasUploaded(true)
     }
     catch (e) {
+      console.log(e)
       setdataWasUploaded(false)
     }
   }
