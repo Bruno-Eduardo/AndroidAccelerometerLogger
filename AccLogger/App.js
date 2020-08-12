@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
 import * as FileSystem from 'expo-file-system';
+import Constants from 'expo-constants';
 
 export default function App() {
   const [data, setData] = useState({});
@@ -65,7 +66,7 @@ export default function App() {
   let { x, y, z } = data;
   Accelerometer.setUpdateInterval(10)
   return (
-    <View>
+    <View style={styles.container}>
       <Text>Accelerometer: (in Gs where 1 G = 9.81 m s^-2) {FileSystem.documentDirectory}</Text>
       <Text>
         x: {round(x)} y: {round(y)} z: {round(z)}
@@ -93,3 +94,9 @@ function round(n) {
 
   return Math.floor(n * 1000000) / 1000000;
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight
+  }
+})
