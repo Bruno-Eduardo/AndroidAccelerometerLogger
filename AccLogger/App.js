@@ -6,20 +6,28 @@ import Constants from 'expo-constants';
 import api from './src/services/api';
 
 export default function App() {
+  const [semaphoreStopAppending, setSemaphoreStopAppending] = useState(false);
   const [data, setData] = useState({});
-  const [dataWasUploaded, setdataWasUploaded] = useState(true);
-  
-  async function saveDataToDB(){
+  const [dataArray, setDataArray] = useState([]);
+  const [dataWasUploaded, setdataWasUploaded] = useState(false);
+
+  async function saveDataToArray(){
+    timedData = {...data,
+                 ...{'time':date.getTime()}
+                 }
+    setDataArray([...dataArray, timedData]);
+  }
+
+  async function sendDataArrayToDB(dataArray){
     try {
-      timedData = {...data,
-                   ...{'time':date.getTime()}
-                  }
-      const response = await api.post('newdata', timedData);
-      setdataWasUploaded(true)
+      const response = await api.post('newdata', dataArray);
+      setdataWasUploaded(true);
+      return true;
     }
     catch (e) {
-      console.log(e)
-      setdataWasUploaded(false)
+      console.log(e);
+      setdataWasUploaded(false);
+      return false
     }
   }
 
@@ -32,9 +40,18 @@ export default function App() {
       _unsubscribe();
     };
   }, []);
-  
+
   useEffect(() => {
-    saveDataToDB();
+    if (!semaphoreStopAppending && dataArray.length < 500){ // will  lose data while creating readyDataArray
+      saveDataToArray();
+    }
+    else{
+      setSemaphoreStopAppending(true)
+      console.log('critical area');
+      sendDataArrayToDB(dataArray);
+      setDataArray([]);
+      setSemaphoreStopAppending(false);
+    }
   }, [data]);
 
   const _toggle = () => {
@@ -85,6 +102,7 @@ export default function App() {
         </TouchableOpacity>
       </View>
       <Text>Last upload status: {String(dataWasUploaded)}</Text>
+      <Text>Main List length: {dataArray.length}</Text>
       <Text>Time: {date.getTime()}</Text>
     </View>
   );
