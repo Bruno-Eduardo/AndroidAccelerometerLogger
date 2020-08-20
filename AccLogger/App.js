@@ -12,7 +12,7 @@ export default function App() {
   async function saveDataToDB(){
     try {
       timedData = {...data,
-                   ...{'time':'todo: implement'}
+                   ...{'time':date.getTime()}
                   }
       const response = await api.post('newdata', timedData);
       setdataWasUploaded(true)
@@ -65,7 +65,8 @@ export default function App() {
   };
 
   let { x, y, z } = data;
-  Accelerometer.setUpdateInterval(10)
+  Accelerometer.setUpdateInterval(10);
+  const date = new Date();
   return (
     <View style={styles.container}>
       <Text>Accelerometer: (in Gs where 1 G = 9.81 m s^-2) {FileSystem.documentDirectory}</Text>
@@ -83,7 +84,8 @@ export default function App() {
           <Text>Fast</Text>
         </TouchableOpacity>
       </View>
-  <Text>Last upload status: {String(dataWasUploaded)}</Text>
+      <Text>Last upload status: {String(dataWasUploaded)}</Text>
+      <Text>Time: {date.getTime()}</Text>
     </View>
   );
 }
