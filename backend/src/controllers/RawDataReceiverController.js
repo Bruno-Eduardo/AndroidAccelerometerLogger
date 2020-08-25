@@ -1,9 +1,14 @@
 //const connection = require('../database/connection');
+const date = new Date();
 
 module.exports={
     async create(request, response) {
         console.log(request.body)
-        const {time, x, y, z} = request.body;
+        formatedcsvs = request.body.map(function(arg) {
+                                                        return arg['time'] + ',' +
+                                                               arg['x']    + ',' +
+                                                               arg['y']    + ',' +
+                                                               arg['z']}).join("\n")
 
         // TODO: use a database
         //await connection('accel').insert({
@@ -13,13 +18,13 @@ module.exports={
         //});
 
         fs = require('fs');
-        fs.writeFile('helloworld.txt',
-                     time + ',' +  x + ',' + y + ',' + z + '\n',
+        fs.writeFile(date.getTime() + '.csv',
+                     formatedcsvs + '\n',
                      function (err) {
                        if (err) return console.log(err);
                        console.log('new data saved at helloworld.txt');
         });
 
-        return response.json({'response': time+',x,y,z'});
+        return response.json({'response': 'saved!'});
     }
 };
