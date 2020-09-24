@@ -9,6 +9,12 @@ module.exports={
                                                                arg['x']    + ',' +
                                                                arg['y']    + ',' +
                                                                arg['z']}).join("\n")
+        const {time, x, y, z} = request.body[0];
+
+        console.log('--------------------')
+        console.log(request.body[0]);
+        console.log({time, x, y, z});
+        console.log(formatedcsvs)
 
         // TODO: use a database
         //await connection('accel').insert({
