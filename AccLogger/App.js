@@ -67,7 +67,7 @@ export default function App() {
   };
 
   const _fast = () => {
-    Accelerometer.setUpdateInterval(10);
+    Accelerometer.setUpdateInterval(2);
   };
 
   const _subscribe = () => {
@@ -82,7 +82,7 @@ export default function App() {
   };
 
   let { x, y, z } = data;
-  Accelerometer.setUpdateInterval(10);
+  Accelerometer.setUpdateInterval(2);
   const date = new Date();
   return (
     <View style={styles.container}>
