@@ -63,7 +63,7 @@ export default function App() {
   };
 
   const _slow = () => {
-    Accelerometer.setUpdateInterval(1000);
+    Accelerometer.setUpdateInterval(100);
   };
 
   const _fast = () => {
@@ -82,7 +82,7 @@ export default function App() {
   };
 
   let { x, y, z } = data;
-  Accelerometer.setUpdateInterval(2);
+  Accelerometer.setUpdateInterval(10);
   const date = new Date();
   return (
     <View style={styles.container}>
