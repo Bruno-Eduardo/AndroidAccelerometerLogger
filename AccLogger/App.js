@@ -10,6 +10,7 @@ export default function App() {
   const [data, setData] = useState({});
   const [dataArray, setDataArray] = useState([]);
   const [dataWasUploaded, setdataWasUploaded] = useState(false);
+  const [lastTimeDiff, setLastTimeDiff] = useState(0);
 
   async function saveDataToArray(){
     timedData = {...data,
@@ -46,8 +47,11 @@ export default function App() {
       saveDataToArray();
     }
     else{
+      var timeNow = date.getTime();
+      console.log('fs=' + 1/(((timeNow - lastTimeDiff)/500)/1000));
+      setLastTimeDiff(timeNow);
       setSemaphoreStopAppending(true)
-      console.log('critical area');
+      //console.log('critical area');
       sendDataArrayToDB(dataArray);
       setDataArray([]);
       setSemaphoreStopAppending(false);
