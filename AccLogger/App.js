@@ -11,6 +11,7 @@ export default function App() {
   const [dataArray, setDataArray] = useState([]);
   const [dataWasUploaded, setdataWasUploaded] = useState(false);
   const [lastTimeDiff, setLastTimeDiff] = useState(0);
+  const samplesPerBatch = 500;
 
   async function saveDataToArray(){
     timedData = {...data,
@@ -41,14 +42,13 @@ export default function App() {
       _unsubscribe();
     };
   }, []);
-
   useEffect(() => {
-    if (!semaphoreStopAppending && dataArray.length < 500){ // will  lose data while creating readyDataArray
+    if (!semaphoreStopAppending && dataArray.length < samplesPerBatch){ // will  lose data while creating readyDataArray
       saveDataToArray();
     }
     else{
       var timeNow = date.getTime();
-      console.log('fs=' + 1/(((timeNow - lastTimeDiff)/500)/1000));
+      console.log('fs=' + 1/(((timeNow - lastTimeDiff)/samplesPerBatch)/1000));
       setLastTimeDiff(timeNow);
       setSemaphoreStopAppending(true)
       //console.log('critical area');
