@@ -6,12 +6,13 @@ import Constants from 'expo-constants';
 import api from './src/services/api';
 
 export default function App() {
+  const samplesPerBatch = 500;
+
   const [semaphoreStopAppending, setSemaphoreStopAppending] = useState(false);
   const [data, setData] = useState({});
   const [dataArray, setDataArray] = useState([]);
   const [dataWasUploaded, setdataWasUploaded] = useState(false);
   const [lastTimeDiff, setLastTimeDiff] = useState(0);
-  const samplesPerBatch = 500;
 
   async function saveDataToArray(){
     timedData = {...data,
