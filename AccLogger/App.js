@@ -5,6 +5,21 @@ import * as FileSystem from 'expo-file-system';
 import Constants from 'expo-constants';
 import api from './src/services/api';
 
+const getDataRefreshRateInMillis = 5000;
+var serverData = "None";
+
+
+const timeoutId = setInterval(() => {
+  api.get('readdata').then(value => {
+      let dataFromRead = value.data.response
+      console.log('readdata:' + dataFromRead); // Success!
+        serverData = dataFromRead;
+    }, reason => {
+      console.log(reason); // Error!
+      serverData = 'Error! 😢';
+    });
+}, getDataRefreshRateInMillis);
+
 export default function App() {
   const samplesPerBatch = 500;
 
@@ -107,6 +122,7 @@ export default function App() {
         </TouchableOpacity>
       </View>
       <Text>Last upload status: {String(dataWasUploaded)}</Text>
+      <Text>Last upload status: {serverData}</Text>
       <Text>Main List length: {dataArray.length}</Text>
       <Text>Time: {date.getTime()}</Text>
     </View>
