@@ -48,7 +48,7 @@ export default function App() {
       saveDataToArray();
     }
     else{
-      var timeNow = date.getTime();
+      let timeNow = date.getTime();
       console.log('fs=' + 1/(((timeNow - lastTimeDiff)/samplesPerBatch)/1000));
       setLastTimeDiff(timeNow);
       setSemaphoreStopAppending(true)
